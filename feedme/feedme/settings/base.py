@@ -1,12 +1,12 @@
 from pathlib import Path
-import config
+from . import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 TEMPLATE_DIR = BASE_DIR / 'templates'
-STATIC_DIR = BASE_DIR / 'static'
+# STATIC_DIR = BASE_DIR / 'static'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -21,7 +21,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    
+    #project apps
+    # 'apps.order_handler',
+    'applications.authentication.apps.AuthenticationConfig',
+    # 'apps.restaurant_handler',
+    'applications.user_handler',
+
+    #third-party apps
     'khalti',
 ]
 
@@ -109,8 +115,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [STATIC_DIR]
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [STATIC_DIR]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -131,12 +137,17 @@ EMAIL_HOST_PASSWORD = "tkrubtmqatforwhd"
 LOGOUT_REDIRECT_URL = 'user_app/login'
 LOGIN_REDIRECT_URL = '/'
 
+#Authentication Field
+AUTHENTICATION_FIELDS = {
+    'auth_fields' : ['email', 'phone']
+}
+
 #User Authentication Model
-AUTH_USER_MODEL = 'userhandler.User'
+AUTH_USER_MODEL = 'user_handler.User'
 
 #User Authentication Backends
 AUTHENTICATION_BACKENDS = (
-    'authentication_app.backend.EmailOrPhoneBackend',
+    'applications.authentication.backends.EmailOrPhoneAuthentication',
     'django.contrib.auth.backends.ModelBackend',
 
 )
