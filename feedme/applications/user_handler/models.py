@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from .managers import UserManager
+# from .managers import CustomerManager, RestaurantAdminManager, AdminManager
+from . import managers
 
 class User(AbstractBaseUser, PermissionsMixin):
     
@@ -23,7 +24,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser    = models.BooleanField(default=False)
     is_active       = models.BooleanField(default=True)
     
-    objects = UserManager()
+    admins = managers.AdminManager()
+    managers = managers.RestaurantAdminManager()
+    customers = managers.CustomerManager()
+    users = managers.UserManager()
     
     USERNAME_FIELD: str     ='email'
     REQUIRED_FIELDS: list   =['password']

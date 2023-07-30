@@ -1,4 +1,5 @@
 from django.contrib.auth.models import BaseUserManager
+from applications.user_handler import models
 
 class UserManager(BaseUserManager):
     def create_superuser(self, email=None, password=None, **extra_fields):
@@ -73,3 +74,26 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+class CustomerManager(UserManager):
+    def create_user(self, email=None, phone = None, password=None, **extra_fields):
+        return super().create_user(email=email, phone=phone,password=password, **extra_fields)
+
+    def get_queryset(self):
+        return super().get_queryset().filter(role=models.User.CUSTOMER)
+
+class RestaurantAdminManager(UserManager):
+    def create_user(self, email=None, phone = None, password=None, **extra_fields):
+        return super().create_staffuser(email=email,phone=phone,password=password, **extra_fields)
+        
+
+    def get_queryset(self):
+        return super().get_queryset().filter(role=models.User.RESTAURANT_ADMIN)
+
+class AdminManager(UserManager):
+    def create_user(self, email=None, phone = None, password=None, **extra_fields):
+        return super().create_superuser(email=email,phone=phone,password=password, **extra_fields)
+        
+
+    def get_queryset(self):
+        return super().get_queryset().filter(role=models.User.PROJECT_ADMIN)
